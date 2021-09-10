@@ -1,0 +1,16 @@
+{
+    "namespace": "jss-playground-Content",
+    "references": [ "jss-playground" ],
+    "items": {
+        "includes": [
+            {
+                "name": "content",
+                "path": "/sitecore/content/jss-playground"
+            },
+            {
+                "name": "media",
+                "path": "/sitecore/media library/jss-playground"
+            }
+        ]
+    }
+}

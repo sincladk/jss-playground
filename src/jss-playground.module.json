@@ -1,0 +1,24 @@
+{
+    "namespace": "jss-playground",
+    "references": [ "InitItems" ],
+    "items": {
+        "includes": [
+            {
+                "name": "layouts",
+                "path": "/sitecore/layout/Layouts/Project/jss-playground"
+            },
+            {
+                "name": "placeholders",
+                "path": "/sitecore/layout/Placeholder Settings/Project/jss-playground"
+            },
+            {
+                "name": "renderings",
+                "path": "/sitecore/layout/Renderings/Project/jss-playground"
+            },
+            {
+                "name": "templates",
+                "path": "/sitecore/templates/Project/jss-playground"
+            }
+        ]
+    }
+}
