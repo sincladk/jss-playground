@@ -85,6 +85,10 @@ const Layout = ({ context }: LayoutProps): JSX.Element => {
       <div className="container">
         <Placeholder name="jss-main" rendering={route} />
       </div>
+      <footer>
+        <Placeholder name="jss-footer" rendering={route} />
+        <p>This is where the footer content will go.</p>
+      </footer>
     </>
   );
 };
