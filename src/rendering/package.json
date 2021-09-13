@@ -1,10 +1,10 @@
 {
-  "name": "jss-sample-nextjs",
+  "name": "my-first-jss-app",
   "description": "Application utilizing Sitecore JavaScript Services and Next.js",
   "version": "18.0.0-canary.8",
   "private": true,
   "config": {
-    "appName": "JssNextWeb",
+    "appName": "my-first-jss-app",
     "rootPlaceholders": [
       "jss-main"
     ],
@@ -85,7 +85,7 @@
     "next:dev": "cross-env NODE_OPTIONS='--inspect' next dev",
     "next:start": "next start",
     "scaffold": "ts-node --project tsconfig.scripts.json scripts/scaffold-component.ts",
-    "start:connected": "npm-run-all --serial bootstrap --parallel next:dev start:watch-components",
+    "start:connected": "cross-env-shell NODE_EXTRA_CA_CERTS=C:\\Users\\dsinclair\\AppData\\Local\\mkcert\\rootCA.pem npm-run-all --serial bootstrap --parallel next:dev start:watch-components",
     "start": "cross-env-shell JSS_MODE=disconnected \"npm-run-all --serial bootstrap --parallel next:dev start:disconnected-proxy start:watch-components\"",
     "start:disconnected-proxy": "ts-node --project tsconfig.scripts.json ./scripts/disconnected-mode-proxy.ts",
     "start:production": "npm-run-all --serial bootstrap next:build next:start",
