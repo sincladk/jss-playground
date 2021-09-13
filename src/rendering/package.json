@@ -6,7 +6,8 @@
   "config": {
     "appName": "my-first-jss-app",
     "rootPlaceholders": [
-      "jss-main"
+      "jss-main",
+      "jss-footer"
     ],
     "sitecoreConfigPath": "/App_Config/Include/zzz",
     "graphQLEndpointPath": "/sitecore/api/graph/edge",
