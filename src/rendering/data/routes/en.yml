@@ -29,6 +29,13 @@ placeholders:
         content: |
           <p>Thanks for using JSS!! Here are some resources to get you started:</p>
 
+          <h3><a href="https://jss.sitecore.com/docs/fundamentals/application-modes#disconnected-developer-mode" target="_blank">Reference to disconnected developer mode</a></h3>
+          <p>With disconnected mode, content data is mocked using local files (json/yaml/js) instead of a 
+          Sitecore instance. Disconnected mode is advantageous when there is no available Sitecore instance 
+          to deploy the app to, where most developer expertise is in JavaScript, or when it is undesirable to 
+          have frontend developers need their own Sitecore instance such as using Macs without a virtual machine 
+          to host Sitecore. All of the sample applications can run in disconnected mode.</p>
+
           <h3><a href="https://jss.sitecore.com" rel="noopener noreferrer">Documentation</a></h3>
           <p>The official JSS documentation can help you with any JSS task from getting started to advanced techniques.</p>
 
@@ -59,3 +66,28 @@ placeholders:
               <li>Delete <code>/data/dictionary/*.yml</code></li>
             </ol>
           </div>
+  jss-footer:
+    - componentName: ContentBlock
+      fields:
+        heading: Footer
+        # to author content in YAML, use _multi-line values_ (prefixed with | + endline)
+        # as long as the same indent is preserved at the beginning of each line, no escaping
+        # is required at all in the value, making it easy to read
+        content: |
+          <p>Thanks for reading this far.</p>
+    - componentName: UnorderedList
+      fields:
+        heading: Useful Links
+      placeholders:
+        jss-list-items:
+          - componentName: ListItem
+            fields:
+              text: List Item 1
+          - componentName: ListItem
+            fields:
+              text: List Item 2
+              textColor: red
+          - componentName: ListItem
+            fields:
+              text: List Item 3
+              textColor: green
