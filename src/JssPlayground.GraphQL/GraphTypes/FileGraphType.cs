@@ -1,11 +1,13 @@
-﻿using GraphQL.Types;
+﻿using System;
+using GraphQL.Types;
 using System.IO;
 
 namespace JssPlayground.GraphQL.GraphTypes
 {
 	public class FileGraphType : ObjectGraphType<FileSystemInfo>
 	{
-		protected const string CHILDREN_PATH_FILTER_ARGUMENT_NAME = "filter";
+		protected const string CHILDREN_NAME_FILTER_ARGUMENT_NAME = "nameFilter";
+		protected const string CHILDREN_TYPE_FILTER_ARGUMENT_NAME = "typeFilter";
 
 		public FileGraphType()
 		{
@@ -26,11 +28,18 @@ namespace JssPlayground.GraphQL.GraphTypes
 
 			Field<ListGraphType<FileGraphType>>("children", "Files and folders in the directory, if applicable",
 				resolve: ResolveChildren,
-				arguments: new QueryArguments(new QueryArgument<StringGraphType>
-				{
-					Name = CHILDREN_PATH_FILTER_ARGUMENT_NAME,
-					Description = "The search string to match against the names of the child directories and files. This parameter can contain a combination of valid literal path and wildcard (* and ?) characters, but it doesn't support regular expressions."
-				}));
+				arguments:
+				new QueryArguments(
+					new QueryArgument<StringGraphType>
+					{
+						Name = CHILDREN_NAME_FILTER_ARGUMENT_NAME,
+						Description =
+							"The search string to match against the names of the child directories and files. This parameter can contain a combination of valid literal path and wildcard (* and ?) characters, but it doesn't support regular expressions."
+					}, new QueryArgument<EnumerationGraphType<FileSystemInfoType>>
+					{
+						Name = CHILDREN_TYPE_FILTER_ARGUMENT_NAME,
+						Description = "Filter by files or directories only"
+					}));
 		}
 
 		private object ResolveType(ResolveFieldContext<FileSystemInfo> arg)
@@ -42,12 +51,29 @@ namespace JssPlayground.GraphQL.GraphTypes
 		{
 			if (arg.Source is DirectoryInfo directory)
 			{
-				if (arg.Arguments.ContainsKey(CHILDREN_PATH_FILTER_ARGUMENT_NAME))
+				Func<DirectoryInfo, string, FileSystemInfo[]> getChildren = null;
+				if (arg.HasArgument(CHILDREN_TYPE_FILTER_ARGUMENT_NAME))
 				{
-					return directory.GetFileSystemInfos(arg.Arguments[CHILDREN_PATH_FILTER_ARGUMENT_NAME].ToString());
+					FileSystemInfoType type = (FileSystemInfoType)arg.Arguments[CHILDREN_TYPE_FILTER_ARGUMENT_NAME];
+					switch (type)
+					{
+						case FileSystemInfoType.File:
+							getChildren = (di, name) => string.IsNullOrEmpty(name) ? di.GetFiles() : di.GetFiles(name);
+							break;
+						case FileSystemInfoType.Directory:
+							getChildren = (di, name) => string.IsNullOrEmpty(name) ? di.GetDirectories() : di.GetDirectories(name);
+							break;
+						default:
+							throw new ArgumentOutOfRangeException();
+					}
+				}
+				else
+				{
+					getChildren = (di, name) => string.IsNullOrEmpty(name) ? di.GetFileSystemInfos() : di.GetFileSystemInfos(name);
 				}
 
-				return directory.GetFileSystemInfos();
+				arg.Arguments.TryGetValue(CHILDREN_NAME_FILTER_ARGUMENT_NAME, out object nameFilter);
+				return getChildren(directory, nameFilter?.ToString());
 			}
 
 			return null;
