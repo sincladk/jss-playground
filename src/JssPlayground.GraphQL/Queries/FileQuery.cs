@@ -18,7 +18,8 @@ namespace JssPlayground.GraphQL.Queries
 			{
 				new QueryArgument<StringGraphType>
 				{
-					Name = "path"
+					Name = "path",
+					Description = "The path of the file system item you want to query. Leave off the starting slash (/) to be relative to the site root or prepend a slash (/) to be absolute to the drive"
 				}
 			};
 		}
