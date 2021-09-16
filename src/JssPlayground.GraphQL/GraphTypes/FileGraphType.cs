@@ -9,12 +9,30 @@ namespace JssPlayground.GraphQL.GraphTypes
 		{
 			Name = "File";
 
-			Field<StringGraphType>("name", "Filename of the file not including extension", resolve: ResolveName);
-			Field<StringGraphType>("extension", "Extension of the file", resolve: ResolveExtension);
-			Field<StringGraphType>("path", "Full path of the file", resolve: ResolvePath);
-			Field<DateTimeGraphType>("created", "Created date and time of the file", resolve: ResolveCreated);
-			Field<DateTimeGraphType>("updated", "Updated date and time of the file", resolve: ResolveUpdated);
-			Field<DateTimeGraphType>("accessed", "Last accessed date and time of the file", resolve: ResolveAccessed);
+			Field<StringGraphType>("name", "Filename of the file or directory including extension, if applicable", resolve: ResolveName);
+			Field<StringGraphType>("extension", "Extension of the file, if applicable", resolve: ResolveExtension);
+			Field<StringGraphType>("path", "Full path of the file or directory", resolve: ResolvePath);
+			Field<EnumerationGraphType<FileSystemInfoType>>("type", "Whether this is a file or directory", resolve: ResolveType);
+			Field<DateTimeGraphType>("created", "Created date and time of the file or directory", resolve: ResolveCreated);
+			Field<DateTimeGraphType>("updated", "Updated date and time of the file or directory", resolve: ResolveUpdated);
+			Field<DateTimeGraphType>("accessed", "Last accessed date and time of the file or directory", resolve: ResolveAccessed);
+
+			Field<ListGraphType<FileGraphType>>("children", "Files and folders in the directory, if applicable", resolve: ResolveChildren);
+		}
+
+		private object ResolveType(ResolveFieldContext<FileSystemInfo> arg)
+		{
+			return arg.Source is DirectoryInfo ? FileSystemInfoType.Directory : FileSystemInfoType.File;
+		}
+
+		private object ResolveChildren(ResolveFieldContext<FileSystemInfo> arg)
+		{
+			if (arg.Source is DirectoryInfo directory)
+			{
+				return directory.GetFileSystemInfos();
+			}
+
+			return null;
 		}
 
 		private object ResolveAccessed(ResolveFieldContext<FileSystemInfo> arg)
@@ -46,5 +64,11 @@ namespace JssPlayground.GraphQL.GraphTypes
 		{
 			return arg.Source.Name;
 		}
+	}
+
+	public enum FileSystemInfoType
+	{
+		File,
+		Directory
 	}
 }
