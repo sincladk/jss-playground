@@ -67,11 +67,17 @@
   <ItemGroup>
     <Content Include="App_Config\Include\Sitecore.LoadBalancing.config" />
     <Content Include="App_Config\Include\Sitecore.Media.config" />
-    <Content Include="App_Config\Include\jss-playground.config" />
+    <Content Include="App_Config\Include\jss-playground.config.disabled" />
     <None Include="Platform.wpp.targets" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="README.md" />
     <None Include="web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\JssPlayground.GraphQL\JssPlayground.GraphQL.csproj">
+      <Project>{e832c3dc-6d4f-4ab4-8dd7-4cbd3f868b41}</Project>
+      <Name>JssPlayground.GraphQL</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
