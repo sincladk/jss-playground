@@ -1,5 +1,13 @@
 # jss-playground
 
+## Customizations
+
+* Added a FileQuery GraphQL query provider to be able to search the filesystem (not a great production use case, but a proof of concept, at least)
+* Added a custom GraphQL endpoint (`/sitecore/api/graph/mfja`) that...does the same things as the `edgeContent` endpoint
+
+Everything below this comment is boilerplate from the `dotnet new sitecore.nextjs.gettingstarted` script run to generate most of this repo.
+
+# Original readme content
 ## About this Solution
 This solution is designed to help developers learn and get started quickly
 with Sitecore Containers, the Sitecore Next.js SDK, and Sitecore
