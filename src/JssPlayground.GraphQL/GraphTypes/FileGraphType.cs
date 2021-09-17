@@ -12,6 +12,7 @@ namespace JssPlayground.GraphQL.GraphTypes
 		public FileGraphType()
 		{
 			Name = "File";
+			Description = "An item representing a file system file or directory";
 
 			Field<StringGraphType>("name", "Filename of the file or directory including extension, if applicable",
 				resolve: ResolveName);
@@ -39,7 +40,9 @@ namespace JssPlayground.GraphQL.GraphTypes
 					{
 						Name = CHILDREN_TYPE_FILTER_ARGUMENT_NAME,
 						Description = "Filter by files or directories only"
-					}));
+					}
+				)
+			);
 		}
 
 		private object ResolveType(ResolveFieldContext<FileSystemInfo> arg)
@@ -52,10 +55,11 @@ namespace JssPlayground.GraphQL.GraphTypes
 			if (arg.Source is DirectoryInfo directory)
 			{
 				Func<DirectoryInfo, string, FileSystemInfo[]> getChildren = null;
-				if (arg.HasArgument(CHILDREN_TYPE_FILTER_ARGUMENT_NAME))
+				
+				var type = arg.GetArgument<FileSystemInfoType?>(CHILDREN_TYPE_FILTER_ARGUMENT_NAME);
+				if (type != null)
 				{
-					FileSystemInfoType type = (FileSystemInfoType)arg.Arguments[CHILDREN_TYPE_FILTER_ARGUMENT_NAME];
-					switch (type)
+					switch (type.Value)
 					{
 						case FileSystemInfoType.File:
 							getChildren = (di, name) => string.IsNullOrEmpty(name) ? di.GetFiles() : di.GetFiles(name);
@@ -72,8 +76,7 @@ namespace JssPlayground.GraphQL.GraphTypes
 					getChildren = (di, name) => string.IsNullOrEmpty(name) ? di.GetFileSystemInfos() : di.GetFileSystemInfos(name);
 				}
 
-				arg.Arguments.TryGetValue(CHILDREN_NAME_FILTER_ARGUMENT_NAME, out object nameFilter);
-				return getChildren(directory, nameFilter?.ToString());
+				return getChildren(directory, arg.GetArgument<string>(CHILDREN_NAME_FILTER_ARGUMENT_NAME));
 			}
 
 			return null;
